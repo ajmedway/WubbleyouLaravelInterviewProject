@@ -25,6 +25,19 @@
                             </div>
                         </div>
 
+                        <!-- Task Priority -->
+                        <div class="form-group">
+                            <label for="task-priority" class="col-sm-3 control-label">Priority</label>
+
+                            <div class="col-sm-6">
+                                <select name="priority" id="task-priority" class="form-control">
+                                    @foreach ($taskPriorities as $taskPriority => $taskPriorityLabel)
+                                    <option value="{{ $taskPriority }}">{{ $taskPriorityLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Add Task Button -->
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6">
@@ -54,6 +67,7 @@
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
+                                        <td class="table-text"><div>{{ $task->priority }}</div></td>
 
                                         <!-- Task Delete Button -->
                                         <td>

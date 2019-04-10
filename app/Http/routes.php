@@ -20,7 +20,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
      */
     Route::get('/', function () {
         return view('tasks', [
-            'tasks' => Task::where('user_id', Auth::id())->orderBy('created_at', 'asc')->get()
+            'tasks' => Task::where('user_id', '=', Auth::id())
+                ->orWhere('priority', Task::PRIORITY_HIGH)
+                ->orderBy('created_at', 'asc')
+                ->get(),
+            'taskPriorities' => Task::getPriorityOptions()
         ]);
     });
 
@@ -40,6 +44,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
         $task = new Task;
         $task->name = $request->name;
+        $task->priority = $request->priority;
         $task->user_id = Auth::id();
         $task->save();
 

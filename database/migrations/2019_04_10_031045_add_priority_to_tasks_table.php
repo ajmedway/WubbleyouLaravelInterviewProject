@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdToTasksTable extends Migration
+class AddPriorityToTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUserIdToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->after('name');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('priority')->after('name');
+            $table->index(['user_id', 'priority']);
         });
     }
 
@@ -26,8 +26,12 @@ class AddUserIdToTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropForeign('tasks_user_id_foreign');
-            $table->dropColumn('user_id');
+            // Laravel 5.2 bug workaround...
+            // https://stackoverflow.com/a/52768106/2429318
+            $table->index('user_id');
+
+            $table->dropIndex(['user_id', 'priority']);
+            $table->dropColumn('priority');
         });
     }
 }
