@@ -14,7 +14,7 @@
 use App\Task;
 use Illuminate\Http\Request;
 
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     /**
      * Show Task Dashboard
      */
