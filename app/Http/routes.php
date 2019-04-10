@@ -16,6 +16,18 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['web', 'auth']], function () {
     /**
+     * Show All High Priority Tasks
+     */
+    Route::get('/high-priority-tasks', function () {
+        return view('high-priority-tasks', [
+            'tasks' => Task::where('priority', Task::PRIORITY_HIGH)
+                ->orderBy('created_at', 'asc')
+                ->get(),
+            'taskPriorities' => Task::getPriorityOptions()
+        ]);
+    });
+
+    /**
      * Show Task Dashboard
      */
     Route::get('/', function () {
@@ -34,6 +46,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('/task', function (Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
+            'priority' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
